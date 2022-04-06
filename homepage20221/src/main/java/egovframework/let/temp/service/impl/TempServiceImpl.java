@@ -17,19 +17,36 @@ import egovframework.let.utl.fcc.service.EgovDateUtil;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import egovframework.rte.fdl.property.EgovPropertyService;
+import egovframework.rte.psl.dataaccess.util.EgovMap;
 
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-@Service("tempService") //고유값
+@Service("tempService") ////고유값
 public class TempServiceImpl extends EgovAbstractServiceImpl implements TempService {
+
+	@Resource(name = "tempMapper")
+	private TempMapper tempMapper;
 	
+	/* DAO로 불러옴 */
 	@Resource(name = "tempDAO")
 	private TempDAO tempDAO;
 	
 	@Override
 	public TempVO selectTemp(TempVO vo) throws Exception {
+		return tempMapper.selectTemp(vo);
+	}
+	
+	//임시데이터 목록 가져오기
+	public List<EgovMap> selectTempList(TempVO vo) throws Exception {
+		return tempMapper.selectTempList(vo);
+	}
+	
+	/* DAO로 불러오는거 주석처리 
+	@Override
+	public TempVO selectTemp(TempVO vo) throws Exception {
 		return tempDAO.selectTemp(vo);
 	}
+	*/
 }

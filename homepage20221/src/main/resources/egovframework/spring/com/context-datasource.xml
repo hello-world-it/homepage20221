@@ -15,7 +15,7 @@
         </property>
     </bean>
     
-    <!-- datasource 설정(propertyConfigurer 활용) -->
+    <!-- datasource 설정(propertyConfigurer 활용) / mysql의 id="dataSource-mysql"의 db와 연결 -->
     <alias name="dataSource-${Globals.DbType}" alias="dataSource" />
     <alias name="dataSource-${Globals.DbType}" alias="egov.dataSource" />
     

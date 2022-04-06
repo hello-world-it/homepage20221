@@ -13,6 +13,6 @@
 	
 	<select id="TempDAO.selectTemp" parameterClass="tempVO" resultMap="temp">
 		select TEMP_ID, TEMP_VAL from lettemp where TEMP_ID = #tempId#
-	</select>
+	</select> <!-- 브라우저에서 받은 tempId값을 DB에서 가지고옴 -->
 
 </sqlMap>

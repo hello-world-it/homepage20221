@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>상세페이지 가져오기</title>
 </head>
 <body> 
 	<!-- 자바에서 받아온 값을 jsp에서 보여줌 -->

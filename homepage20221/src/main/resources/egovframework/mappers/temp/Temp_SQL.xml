@@ -15,5 +15,20 @@
 	<select id="selectTempList" resultType="egovMap">
 		select TEMP_ID, TEMP_VAL from lettemp
 	</select>
+	
+	<!-- insert문 작성 -->
+	<insert id="insertTemp" parameterType="tempVO"> <!-- sql_mapper_config.xml에 arias tempVO로 명칭을 정해놔서 parameterType="tempVO"으로 선언 -->
+		insert into lettemp (TEMP_VAL) values ( #{tempVal} )
+	</insert>
+	
+	<!-- update문 작성 -->
+	<update id="updateTemp" parameterType="egovframework.let.temp.service.TempVO">
+		update lettemp set TEMP_VAL = #{tempVal} where TEMP_ID = #{tempId}
+	</update>
+	
+	<!-- delete문 작성 -->
+	<delete id="deleteTemp" parameterType="egovframework.let.temp.service.TempVO">
+		delete from lettemp where TEMP_ID = #{tempId}
+	</delete>
 
 </mapper>

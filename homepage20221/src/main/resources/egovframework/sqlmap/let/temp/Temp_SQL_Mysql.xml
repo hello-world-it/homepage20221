@@ -15,4 +15,4 @@
 		select TEMP_ID, TEMP_VAL from lettemp where TEMP_ID = #tempId#
 	</select> <!-- 브라우저에서 받은 tempId값을 DB에서 가지고옴 -->
 
-</sqlMap>
+</sqlMap> <!-- Impl - TempMapper - xml을 호출해서 가져오기 -->

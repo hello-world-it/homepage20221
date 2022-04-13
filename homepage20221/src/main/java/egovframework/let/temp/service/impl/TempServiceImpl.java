@@ -40,8 +40,25 @@ public class TempServiceImpl extends EgovAbstractServiceImpl implements TempServ
 	
 	//임시데이터 목록 가져오기
 	public List<EgovMap> selectTempList(TempVO vo) throws Exception {
-		return tempMapper.selectTempList(vo);
+		return tempMapper.selectTempList(vo); 
 	}
+	
+	//임시데이터 등록하기 / String으로 받아오는 id값 체크
+	public String insertTemp(TempVO vo) throws Exception {
+		tempMapper.insertTemp(vo); //void형식으로 받아오는데 String으로 받기 위해 따로 선언 후 아래에 return null
+		return null;
+	}
+	
+	//임시데이터 수정하기
+	public void updateTemp(TempVO vo) throws Exception {
+		tempMapper.updateTemp(vo);
+	}
+	
+	//임시데이터 삭제하기
+	public void deleteTemp(TempVO vo) throws Exception {
+		tempMapper.deleteTemp(vo);
+	}
+	
 	
 	/* DAO로 불러오는거 주석처리 
 	@Override

@@ -9,7 +9,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Language" content="ko">
-<title>데이터 가져오기~_List가져오기</title>
+<title>데이터 가져오기~_List가져오기</title> 
 </head>
 
 <body> 
@@ -25,11 +25,19 @@
 			<c:forEach var="result" items="${resultList}">
 				<tr>
 					<td><c:out value="${result.tempId}" /></td>
-					<td><c:out value="${result.tempVal}" /></td>
+					<td>
+						<c:url var="viewUrl" value="/temp/select.do">
+							<c:param name="tempId" value="${result.tempId}" />
+						</c:url>
+						<a href="${viewUrl}"><c:out value="${result.tempVal}" /></a>
+					</td>
 				</tr>
 			</c:forEach>
 		</tbody>
 	</table>
+	
+	<!-- 글쓰기 버튼은 List에서 노출 -->
+	<a href="/temp/tempRegist.do">등록하기</a> 
 	
 </body>
 </html>

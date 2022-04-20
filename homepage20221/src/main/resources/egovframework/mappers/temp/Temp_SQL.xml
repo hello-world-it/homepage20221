@@ -12,8 +12,15 @@
 		select TEMP_ID as TempId, TEMP_VAL as TempVal from lettemp where TEMP_ID = #{tempId}
 	</select>
 
+	<!-- list / limit #{recordCountPerPage} offset #{firstIndex}를 추가하여 한 화면에 10개씩 보여주기
+	 #{recordCountPerPage} : class ComDefaultVO에 pageUnit 10개 지정되어 있다 -->
 	<select id="selectTempList" resultType="egovMap">
-		select TEMP_ID, TEMP_VAL from lettemp
+		select TEMP_ID, TEMP_VAL from lettemp limit #{recordCountPerPage} offset #{firstIndex}
+	</select>
+	
+	<!-- 게시글에 대한 총 카운트 수 / 220420 rownum(오라클)과 limit(마리아db) 선언 -->
+	<select id="selectTempListCnt" resultType="java.lang.Integer">
+		select count(*) cnt from lettemp
 	</select>
 	
 	<!-- insert문 작성 -->

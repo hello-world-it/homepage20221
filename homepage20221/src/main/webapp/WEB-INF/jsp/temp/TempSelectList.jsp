@@ -13,7 +13,7 @@
 </head>
 
 <body> 
-	
+게시물 총 수 : <c:out value="${paginationInfo.totalRecordCount}" />건
 	<table>
 		<thead>
 			<tr>
@@ -35,6 +35,16 @@
 			</c:forEach>
 		</tbody>
 	</table>
+	
+	<!-- 페이징 번호 추가/ value="${pageUrl}을 jsFunction에 넣어준다. 해당 페이지로 이동하라는 뜻.  
+	paginationInfo="${paginationInfo}" spring - context-common.xml -->
+	<div id="poging_div">
+		<ul class="paging_align">
+			<c:url var="pageUrl" value="/temp/selectList.do?" /> <!-- jstl -->
+			<c:set var="pagingParam"><c:out value="${pageUrl}" /></c:set>
+			<ui:pagination paginationInfo="${paginationInfo}" type="image" jsFunction="${pagingParam}"/>
+		</ul>
+	</div>
 	
 	<!-- 글쓰기 버튼은 List에서 노출 -->
 	<a href="/temp/tempRegist.do">등록하기</a> 

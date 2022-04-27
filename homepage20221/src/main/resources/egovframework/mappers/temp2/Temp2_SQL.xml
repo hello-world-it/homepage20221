@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.let.temp2.service.impl.Temp2Mapper">
+<!-- Ctrl 클릭시  namespace의 위치로 이동 -->
+
+	<resultMap id="temp" type="egovframework.let.temp2.service.Temp2VO">
+		<result property="tempId" column="TEMP_ID" />
+		<result property="tempVal" column="TEMP_VAL" />
+	</resultMap> 
+	
+	<select id="selectTemp" resultType="egovframework.let.temp2.service.Temp2VO"> <!-- config - sql-mapper-config엔 TempVO가 연결되어 있어. 어느 VO에 담겨야 하는지 알려주기 위해 Temp2VO에 연결  -->
+		select TEMP_ID as TempId, TEMP_VAL as TempVal from lettemp2 where TEMP_ID = #{tempId}
+	</select>
+
+	<!-- list / limit #{recordCountPerPage} offset #{firstIndex}를 추가하여 한 화면에 10개씩 보여주기
+	 #{recordCountPerPage} : class ComDefaultVO에 pageUnit 10개 지정되어 있다 -->
+	<select id="selectTempList" resultType="egovMap">
+		select TEMP_ID, TEMP_VAL from lettemp2 limit #{recordCountPerPage} offset #{firstIndex}
+	</select>
+	
+	<!-- 게시글에 대한 총 카운트 수 / 220420 rownum(오라클)과 limit(마리아db) 선언 -->
+	<select id="selectTempListCnt" resultType="java.lang.Integer">
+		select count(*) cnt from lettemp2
+	</select>
+	
+	<!-- insert문 작성 -->
+	<insert id="insertTemp" parameterType="egovframework.let.temp2.service.Temp2VO"> <!-- sql_mapper_config.xml에 arias tempVO로 명칭을 정해놔서 parameterType="tempVO"으로 선언 -->
+		insert into lettemp2 (TEMP_ID, TEMP_VAL) values ( #{tempId}, #{tempVal} )
+	</insert> <!-- id값을 받아 넣기 위해 쿼리문에 TEMP_ID 추가 -->
+	
+	<!-- update문 작성 -->
+	<update id="updateTemp" parameterType="egovframework.let.temp2.service.Temp2VO">
+		update lettemp2 set TEMP_VAL = #{tempVal} where TEMP_ID = #{tempId}
+	</update>
+	
+	<!-- delete문 작성 -->
+	<delete id="deleteTemp" parameterType="egovframework.let.temp2.service.Temp2VO">
+		delete from lettemp2 where TEMP_ID = #{tempId}
+	</delete>
+
+</mapper>

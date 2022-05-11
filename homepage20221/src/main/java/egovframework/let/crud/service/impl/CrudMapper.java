@@ -19,7 +19,7 @@ public interface CrudMapper {
 	//데이터 등록 / 등록,수정,삭제 시 db에서 받아오는 결과 값이 없어서 void 선언 - 무슨 형(String, int, EgovMap 등)으로 받는지 체크!
 	void insertCrud(CrudVO vo) throws Exception;
 	
-	//데이터 가져오기 / selectTemp는 Temp_SQL의 <mapper namespace="egovframework.let.temp.service.impl.TempMapper">에 연결됨
+	//데이터 가져오기 / selectCrud는 Crud_SQL의 <mapper namespace="egovframework.let.temp.service.impl.CrudMapper">에 연결됨
 	CrudVO selectCrud(CrudVO vo) throws Exception;
 //	객체선언  
 	

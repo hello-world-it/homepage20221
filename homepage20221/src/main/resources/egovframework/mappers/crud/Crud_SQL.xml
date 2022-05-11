@@ -4,7 +4,7 @@
 <!--  namespace(mapper와 연결) / 패키지명.매퍼명으로 복붙헤서 가져오면 오타를 줄일 수 있다! / Ctrl 클릭시  namespace의 위치로 이동 -->
 
 	<resultMap id="crud" type="egovframework.let.crud.service.CrudVO"> <!-- 변수를 받아오는 resultMap / 쿼리에 대한 라인 수와 속도를 줄여주기 위해 사용  -->
-		<result property="crudId" column="CRUD_ID" /> <!-- 변수명은 컬럼명(객체명)과 맞춰준다 -->
+		<result property="crudId" column="CRUD_ID" /> <!-- 변수명은 컬럼명(객체명)과 맞춰준다. 변수명만 확인해서 뭔지 알 수 있게 -->
 		<result property="crudSj" column="CRUD_SJ" />
 		<result property="crudCn" column="CRUD_CN" />
 		<result property="userNm" column="USER_NM" /> 

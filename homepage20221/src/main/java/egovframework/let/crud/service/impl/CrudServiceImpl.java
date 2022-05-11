@@ -47,7 +47,7 @@ public class CrudServiceImpl extends EgovAbstractServiceImpl implements CrudServ
 	//데이터 등록하기 / Id Gen으로 받기  
 	@Override
 	public String insertCrud(CrudVO vo) throws Exception { 
-		String id = idgenService.getNextStringId(); // 변수명 idgenService의 id를 get
+		String id = idgenService.getNextStringId(); //변수명 idgenService의 id를 get
 		vo.setCrudId(id);
 		crudMapper.insertCrud(vo); //받은 id를 mapper에서 불러와서 insert
 		

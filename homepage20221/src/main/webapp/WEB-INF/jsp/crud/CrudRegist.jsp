@@ -1,9 +1,9 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%> 
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%> 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <!DOCTYPE html>
 <html>
@@ -37,7 +37,7 @@ th, td {
 		<button type="submit">등록</button>
 	</form>	 -->
 	
-<table>
+<!-- <table>
 	<tbody>
 		<tr>
 			<th>제목</th>
@@ -52,7 +52,7 @@ th, td {
 			<td></td>
 		</tr>
 	</tbody>
-</table>
+</table> -->
 	
 	<!-- tempId를 체크 하고 actionUrl 정의 / id가 있으면 update 없으면 insert -->
 	<c:choose>

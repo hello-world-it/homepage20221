@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class CrudController {
 	
 	////상속을 받아 사용
-	@Resource(name= "crudService") ////name은 ServiceImpl의 @Service("tempService") 값과 동일해야 호출이 가능
+	@Resource(name= "crudService") ////name은 ServiceImpl의 @Service("crudService") 값과 동일해야 호출이 가능
 	private CrudService crudService;
   //private   클래스객체명           변수명;  	//클래스객체명은 앞글자 대문자, (내가앞으로사용할)변수명 앞글자 소문자
 	

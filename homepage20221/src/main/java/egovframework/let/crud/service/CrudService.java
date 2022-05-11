@@ -10,7 +10,6 @@ public interface CrudService {
 	//데이터(서비스) 가져오기(연결) 
 	////통로역할 
 	
-	
 	//데이터 목록 가져오기
 	public List<EgovMap> selectCrudList(CrudVO vo) throws Exception;
 	

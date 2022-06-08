@@ -192,7 +192,8 @@ public class BoardVO extends Board implements Serializable {
      *
      * @return the sortOrdr
      */
-    public long getSortOrdr() {
+    @Override
+	public long getSortOrdr() {
 	return sortOrdr;
     }
 
@@ -202,7 +203,8 @@ public class BoardVO extends Board implements Serializable {
      * @param sortOrdr
      *            the sortOrdr to set
      */
-    public void setSortOrdr(long sortOrdr) {
+    @Override
+	public void setSortOrdr(long sortOrdr) {
 	this.sortOrdr = sortOrdr;
     }
 
@@ -602,7 +604,8 @@ public class BoardVO extends Board implements Serializable {
     /**
      * toString 메소드를 대치한다.
      */
-    public String toString() {
+    @Override
+	public String toString() {
     	return ToStringBuilder.reflectionToString(this);
     }
 }

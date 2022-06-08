@@ -37,6 +37,7 @@
 
 <div class="container" >
 	<div id="contents" >
+	
 		<%-- 검색영역 --%>
 		<div id="bbs_search" >
 			<form name="frm" method="post" action="/board/selectList.do">
@@ -101,8 +102,9 @@
 						<%-- 일반 글 --%>
 						<c:forEach var="result"  items="${resultList}" varStatus="status">
 							<tr>
-								<td class="num">
+								<td class="num"> <!-- ★게시글번호. 최근 게시글이 제일 큰 번호를 갖게 -->
 									<c:out value="${paginationInfo.totalRecordCount - ((searchVO.pageIndex-1) * searchVO.pageUnit) - (status.count - 1)}" />
+														<%-- 올라온 총 글의 갯수					현재 글의 페이지			한 페이지 당 보여줄 글의 수			? --%>
 								</td>
 								<td class="tit">
 									<c:url var="viewUrl" value="/board/select.do${_BASE_PARAM}">
@@ -110,7 +112,7 @@
 										<c:param name="pageIndex" value="${searchVO.pageIndex}" />
 									</c:url>
 									<a href="${viewUrl}">
-										<c:if test="${result.othbcAt eq 'Y'}">
+										<c:if test="${result.othbcAt eq 'Y'}"> <!-- 비밀글일 경우 -->
 											<img src="/asset/BBSTMP_0000000000001/images/ico_board_lock.gif" alt="비밀 글 아이콘" />
 										</c:if>
 									<c:out value="${result.boardSj}" />
@@ -129,7 +131,7 @@
 						</c:forEach>
 						
 						<%-- 게시 글이 없을 경우 --%>
-						<c:if test="${fn:length(resultList) == 0}">
+						<c:if test="${fn:length(resultList) == 0}"> 
 							<tr class="empty">
 								<td colspan="5">검색 데이터가 없습니다.</td>
 							</tr>
@@ -138,7 +140,7 @@
 				</table>
 			</div>
 			
-			<div id="paging">
+			<div id="paging"> <!-- 페이징네이션은 spring - com - context-common 63줄 For Pagination Tag -->
 				<c:url var="pageUrl" value="/board/selectList.do${_BASE_PARAM}" />
 				<c:set var="pagingParam"><c:out value="${pageUrl}" /></c:set>
 				<ui:pagination paginationInfo="${paginationInfo}" type="image" jsFunction="${pagingParam}"/>
@@ -155,7 +157,7 @@
 	</div>
 </div>
 
-<script>
+<script> /* forward 시 액션에 맞는 프로세서가 정상적으로 종료 시 메세지(등록되었습니다. 삭제되었습니다 등)를 보내주는 역할 */
 <c:if test="${not empty message}">
 	alert("${message}");
 </c:if>	

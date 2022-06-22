@@ -55,6 +55,16 @@
 					<dd><c:out value="${result.inqireCo}" /></dd>
 				</dl>
 				
+				<!-- 220622 상세보기 -->
+				<dl class="tit_view">
+					<dt>첨부파일목록</dt>
+					<dd> <!-- import에 있는 소스를 가지고 온다 / 모듈을 가지고 불러다 사용 -->
+						<c:import url="/cmm/fms/selectFileInfs.do" charEncoding="utf-8">
+							<c:param name="param_atchFileId" value="${result.atchFileId}" />
+						</c:import>
+					</dd>
+				</dl>
+				
 				<div class="view_cont">
 					<c:out value="${result.boardCn}" escapeXml="false" />
 				</div>

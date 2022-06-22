@@ -100,13 +100,24 @@
 						</c:forEach>
 						
 						<%-- 일반 글 --%>
-						<c:forEach var="result"  items="${resultList}" varStatus="status">
+						<c:forEach var="result"  items="${resultList}" varStatus="status"> <%-- varStatus: foreach 속성. 포이치에 대한 변수명 (이중포문 시 변수명 중복X) --%>
 							<tr>
-								<td class="num"> <!-- ★게시글번호. 최근 게시글이 제일 큰 번호를 갖게 -->
+								<td class="num"> <%-- ★게시글번호. 최근 게시글이 제일 큰 번호를 갖게 / 회원목록에서도 사용 (->desc) / 선착순 예약시스템은 반대(->asc) --%>
 									<c:out value="${paginationInfo.totalRecordCount - ((searchVO.pageIndex-1) * searchVO.pageUnit) - (status.count - 1)}" />
-														<%-- 올라온 총 글의 갯수					현재 글의 페이지			한 페이지 당 보여줄 글의 수			? --%>
+																<%-- 올라온 총 글의 갯수		   현재 글의 페이지 번호 - 1    *	한 페이지 당 보여줄 글의 수★	 count는 1부터(index는 0부터)  --%>
 								</td>
 								<td class="tit">
+								
+									<!-- 220622 썸네일 추가 -->
+									<c:if test="${not empty result.atchFileNm}">
+										<c:url var="thumbUrl" value="/cmm/fms/getThumbImage.do">
+											<c:param name="thumbYn" value="Y" />
+											<c:param name="atchFileNm" value="${result.atchFileNm}" />
+										</c:url>
+										<img alt="" src="${thumbUrl}">
+									</c:if>
+									
+								
 									<c:url var="viewUrl" value="/board/select.do${_BASE_PARAM}">
 										<c:param name="boardId" value="${result.boardId}" />
 										<c:param name="pageIndex" value="${searchVO.pageIndex}" />

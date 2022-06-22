@@ -11,6 +11,14 @@
 	        	<entry key="posblAtchFileSize" value="5242880"/>
 	        	<entry key="Globals.fileStorePath" value="/user/file/sht/"/>
 	        	<entry key="Globals.addedOptions" value="false"/>
+	        	
+	        	<!-- 220615 -->
+	        	<entry key="board.fileStorePath" value="${Globals.File}/upload/board/" /> 
+	        	<!-- 			저장할 경로  			globals에서 가져온 변수 ${Globals.File} - 파일저장위치 -->
+	        	
+	        	<entry key="photoThumbWidth" value="200" />
+		        <entry key="photoThumbHeight" value="140" />
+		        <!-- 썸네일의 기본 크기 -->
 	        </map>
 		</property>
 	</bean>

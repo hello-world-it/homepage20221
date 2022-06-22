@@ -54,9 +54,9 @@ public class EgovFileMngController {
 	String atchFileId = (String)commandMap.get("param_atchFileId");
 
 	fileVO.setAtchFileId(atchFileId);
-	List<FileVO> result = fileService.selectFileInfs(fileVO);
+	List<FileVO> result = fileService.selectFileInfs(fileVO); //리스트에서 가지고와서
 
-	model.addAttribute("fileList", result);
+	model.addAttribute("fileList", result); //모델에 뿌려줘
 	model.addAttribute("updateFlag", "N");
 	model.addAttribute("fileListCnt", result.size());
 	model.addAttribute("atchFileId", atchFileId);

@@ -18,7 +18,85 @@
 <link href="/asset/BBSTMP_0000000000001/style.css" rel="stylesheet" />
 <!-- 공통 Style -->
 <link href="/asset/LYTTMP_0000000000000/style.css" rel="stylesheet" />
+
 <script src="http://code.jquery.com/jquery-latest.min.js"></script> <!-- jquery 항상 최신버전 사용하기 -->
+
+<script src="https://cdn.tiny.cloud/1/f4jgwu1ymxy0ednvwrd1af0ozo4kbyfl3r1kc3n0rkap3ak1/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+$(function(){
+    var plugins = [ //★ 기능 추가시  ex 유료버전 사용 시 추가. 
+        "advlist", "autolink", "lists", "link", "image", "charmap", "print", "preview", "anchor",
+        "searchreplace", "visualblocks", "code", "fullscreen", "insertdatetime", "media", "table",
+        "paste", "code", "help", "wordcount", "save"
+    ];
+    var edit_toolbar = 'formatselect fontselect fontsizeselect |' //★ 기능 추가시
+               + ' forecolor backcolor |'
+               + ' bold italic underline strikethrough |'
+               + ' alignjustify alignleft aligncenter alignright |'
+               + ' bullist numlist |'
+               + ' table tabledelete |'
+               + ' link image';
+
+    tinymce.init({
+    	language: "ko_KR", // 한글판으로 변경
+        selector: '#boardCn', //★ id="boardCn"와 매핑(연결). selector에서 찾아가서 붙여준다 
+        height: 500,
+        menubar: false,
+        plugins: plugins,
+        toolbar: edit_toolbar,
+        
+        /*** image upload ***/
+        image_title: true,
+        /* enable automatic uploads of images represented by blob or data URIs*/
+        automatic_uploads: true,
+        /*
+            URL of our upload handler (for more details check: https://www.tiny.cloud/docs/configure/file-image-upload/#images_upload_url)
+            images_upload_url: 'postAcceptor.php',
+            here we add custom filepicker only to Image dialog
+        */
+        file_picker_types: 'image',
+        /* and here's our custom image picker*/
+        file_picker_callback: function (cb, value, meta) {
+            var input = document.createElement('input');
+            input.setAttribute('type', 'file');
+            input.setAttribute('accept', 'image/*');
+
+            /*
+            Note: In modern browsers input[type="file"] is functional without
+            even adding it to the DOM, but that might not be the case in some older
+            or quirky browsers like IE, so you might want to add it to the DOM
+            just in case, and visually hide it. And do not forget do remove it
+            once you do not need it anymore.
+            */
+            input.onchange = function () {
+                var file = this.files[0];
+
+                var reader = new FileReader();
+                reader.onload = function () {
+                    /*
+                    Note: Now we need to register the blob in TinyMCEs image blob
+                    registry. In the next release this part hopefully won't be
+                    necessary, as we are looking to handle it internally.
+                    */
+                    var id = 'blobid' + (new Date()).getTime();
+                    var blobCache =  tinymce.activeEditor.editorUpload.blobCache;
+                    var base64 = reader.result.split(',')[1];
+                    var blobInfo = blobCache.create(id, file, base64);
+                    blobCache.add(blobInfo);
+
+                    /* call the callback and populate the Title field with the file name */
+                    cb(blobInfo.blobUri(), { title: file.name });
+                };
+                reader.readAsDataURL(file);
+            };
+            input.click();
+        },
+        /*** image upload ***/
+        
+        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+    });
+});
+</script>
 
 </head>
 
@@ -46,10 +124,11 @@
 </c:choose>
 
 <div class="container">
-<div class="contents">
-	<form action="${actionUrl}" method="post" id="frm" name="frm" onsubmit="return regist()"> <!-- onsubmit 태그에 대한 유효성검사(정상이면 returntrue) 시 사용 (필수값에 사용. 미작성시 경고창 뜨거나 미작성 한 곳으로 커서를 보내는 스크립트 사용 가능) -->
+<div id="contents">
+	<form action="${actionUrl}" method="post" id="frm" name="frm" onsubmit="return regist()" enctype="multipart/form-data"> <!-- onsubmit 태그에 대한 유효성검사(정상이면 returntrue) 시 사용 (필수값에 사용. 미작성시 경고창 뜨거나 미작성 한 곳으로 커서를 보내는 스크립트 사용 가능) -->
 		<input type="hidden" name="boardId" value="${result.boardId}" />
 		
+		<input type="hidden" name="returnUrl" value="/board/boardRegist.do" /> <!-- 220622 파일 삭제 시 해당 페이지로 다시 오게 한다 -->
 		
 		<table class="chart2">
 			<caption>게시글 작성_이 표는 제목 내용 조회수 날짜로 구성되어있습니다</caption> <!-- 표의 제목과 설명 / 웹접근성을 위해 필수 -->
@@ -94,7 +173,31 @@
 			<tr>
 				<th scope="row">내용</th>
 				<td> <!-- textarea는 엔터없이 붙여서 사용 / 엔터 후 textaea에 텍스트를 적을시 엔터가 된 상태로 출력된다 -->
-					<textarea id="boardCn" name="boardCn" rows="15" title="내용입력"><c:out value="${result.boardCn}" /></textarea>
+					<textarea id="boardCn" name="boardCn" rows="15" title="내용입력"><c:out value="${result.boardCn}" /></textarea> <!-- name은 디비에 들어가는거라 name값을 빼고 넣으면 글이 디비에 들어가지 않는다 / 적절하게 잘 사용하자 -->
+				</td>
+			</tr>
+			
+			<!-- 220622 -->
+			<c:if test="${not empty result.atchFileId}">
+				<tr>
+					<th scope="row">기존<br />첨부파일목록</th>
+					<td>
+						<c:import url="/cmm/fms/selectFileInfsForUpdate.do" charEncoding="utf-8">
+							<c:param name="param_atchFileId" value="${result.atchFileId}" />
+						</c:import>
+					</td>
+				</tr>
+			</c:if>
+			
+			<!-- 220615 파일첨부 -->
+			<tr>
+				<th scope="row">파일첨부</th>
+				<td> <!-- name값을 다르게 해서 넣어주면 여러개 첨부 가능 -->
+					<input type="file" name="file_1"><br />
+					<input type="file" name="file_2"><br />
+					<input type="file" name="file_3"><br />
+					<input type="file" name="file_4"><br />
+					<input type="file" name="file_5"><br />
 				</td>
 			</tr>
 			</tbody>
@@ -147,6 +250,10 @@ function regist(){ //
 		alert("제목을 입력해주세요.");
 		return false; //종료
 	}
+//	return; //true 일 땐 생략
+	
+	//★ 에디터 내용 저장 (에디터에 작성 된 걸 디비에 저장. 태그도 함께 저장) / 에디터 사용 시 꼭 붙여주는데 어떻게 쓰는지  확인!!
+	$("#boardCn").val(tinymce.activeEditor.getContent()); //tunymce -> 타이니 기능(변수명) 
 }
 </script>
 

@@ -1,13 +1,15 @@
 package egovframework.let.board.web;
 import java.util.List; ////선언을 했는데 쓰지 않으면 노란줄이 생김
+import java.util.Map;
 
 import egovframework.com.cmm.LoginVO;
+import egovframework.com.cmm.service.EgovFileMngService;
+import egovframework.com.cmm.service.FileVO;
 import egovframework.com.cmm.util.EgovUserDetailsHelper;
 import egovframework.let.board.service.BoardService;
 import egovframework.let.board.service.BoardVO;
-import egovframework.let.crud.service.CrudVO;
 import egovframework.let.utl.fcc.service.EgovStringUtil;
-
+import egovframework.let.utl.fcc.service.FileMngUtil;
 import egovframework.rte.psl.dataaccess.util.EgovMap;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 
@@ -18,6 +20,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 @Controller
 public class BoardController {
@@ -26,6 +30,14 @@ public class BoardController {
 	@Resource(name= "boardService") ////name은 ServiceImpl의 @Service("crudService") 값과 동일해야 호출이 가능
 	private BoardService boardService;
   //private   클래스객체명           변수명;  	//클래스객체명은 앞글자 대문자, (내가앞으로사용할)변수명 앞글자 소문자
+	
+	//220615 파일추가
+	@Resource(name="EgovFileMngService")
+	private EgovFileMngService fileMngService;
+	
+	@Resource(name="fileMngUtil")
+	private FileMngUtil fileUtil;
+	//
 	
 	//1.게시물 목록 가져오기
 	@RequestMapping(value = "/board/selectList.do")
@@ -82,8 +94,8 @@ public class BoardController {
 	}
 		
 
-	//2.게시물 등록/수정 
-	@RequestMapping(value = "/board/boardRegist.do") //주소로 갔을 때(SelectList에서) 해당 소스가 실행
+	//2.게시물 등록/수정  (1)화면으로 가고)
+	@RequestMapping(value = "/board/boardRegist.do") //주소로 갔을 때(SelectList에서) 해당 소스가 실행 
 	public String boardRegist(@ModelAttribute("searchVO") BoardVO boardVO, //url을 사용자가 쓸 수 있게 만들어준다
 			HttpServletRequest request, ModelMap model) throws Exception {
 		
@@ -114,11 +126,12 @@ public class BoardController {
 	} 
 	
 	
-	//3.게시물 등록
+	//3.게시물 등록 (2)디비에 등록)
 	@RequestMapping(value="/board/insert.do")
-	public String insert(@ModelAttribute("searchVO") BoardVO searchVO,
+	public String insert(final MultipartHttpServletRequest multiRequest, @ModelAttribute("searchVO") BoardVO searchVO,
 		HttpServletRequest request, ModelMap model) throws Exception {
-			
+		
+		
 		//이중 서브밋 방지 체크
 		if(request.getSession().getAttribute("sessionBoard") != null) { //2)등록 후 F5 시 not null(session에 값이 있음)이므로 selectList.do로 이동 (이중등록방지)
 			return "forward:/board/selectList.do";
@@ -129,6 +142,18 @@ public class BoardController {
 			model.addAttribute("message", "로그인 후 사용가능합니다.");
 			return "forward:/board/selectList.do"; //로그인페이지로 이동 후 로그인이 되면 현재 글쓰던 페이지의 url을 세션에 저장했다가 글쓰던 페이지로 이동시켜줌
 		}
+		
+		//220615
+		List<FileVO> result = null;
+		String atchFileId = "";
+		
+		final Map<String, MultipartFile> files = multiRequest.getFileMap();
+		if(!files.isEmpty()) {
+			result = fileUtil.parseFileInf(files, "BOARD_", 0, "", "board.fileStorePath");
+			atchFileId = fileMngService.insertFileInfs(result);
+		}
+		searchVO.setAtchFileId(atchFileId);
+		//
 		
 		searchVO.setCreatIp(request.getRemoteAddr()); //4)작성자의 공인IP를 받아옴 getRemoteAddr()
 		searchVO.setUserId(user.getId()); //userId를 만들어서 아이디를 받아옴
@@ -164,7 +189,7 @@ public class BoardController {
 	
 	//5.게시물 수정하기
 	@RequestMapping(value = "/board/update.do")
-	public String update(@ModelAttribute("searchVO") BoardVO searchVO,
+	public String update(final MultipartHttpServletRequest multiRequest, @ModelAttribute("searchVO") BoardVO searchVO,
 			HttpServletRequest request, ModelMap model) throws Exception{
 		// 이중 서브밋 방지
 		if(request.getSession().getAttribute("sessionBoard") != null) {
@@ -182,6 +207,28 @@ public class BoardController {
 		searchVO.setUserId(user.getId());
 		
 		boardService.updateBoard(searchVO); //★해커침입방지 1.스크립트,jsp 2.java 3.sql
+		
+		
+		//220622 / 수정도 첨부파일 있을 때만 실행
+		String atchFileId = searchVO.getAtchFileId();
+		final Map<String, MultipartFile> files = multiRequest.getFileMap();
+		if(!files.isEmpty()) { //파일이 있으면 
+			if(EgovStringUtil.isEmpty(atchFileId)) { //첨부파일 아이디가 없으면		sn(펌부파일수)=0 ""  저장경로(global에서 셋팅) -> 등록과 같다
+				List<FileVO> result = fileUtil.parseFileInf(files, "BOARD_", 0, "", "board.fileStorePath");
+				atchFileId = fileMngService.insertFileInfs(result);
+				searchVO.setAtchFileId(atchFileId);
+			}else { //수정 시 파일이 있으면  
+				FileVO fvo = new FileVO();
+				fvo.setAtchFileId(atchFileId); //파일아이디를 가지고
+				int cnt = fileMngService.getMaxFileSN(fvo); //SN을 구해온다 (추가 파일을 위한 갯수를 세어 그 다음 번호로 준다)
+				List<FileVO> _result = fileUtil.parseFileInf(files, "BOARD_", cnt, atchFileId, "board.fileStorePath");
+				fileMngService.updateFileInfs(_result);
+			}
+		}
+		searchVO.setUserId(user.getId());
+		
+		boardService.updateBoard(searchVO);
+		
 		
 		// 이중 서브밋 방지
 		request.getSession().setAttribute("sessionBoard", searchVO);

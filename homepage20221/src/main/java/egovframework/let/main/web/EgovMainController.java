@@ -3,6 +3,8 @@ package egovframework.let.main.web;
 import java.util.Map;
 
 import egovframework.com.cmm.ComDefaultVO;
+import egovframework.com.cmm.LoginVO;
+import egovframework.com.cmm.util.EgovUserDetailsHelper;
 import egovframework.let.cop.bbs.service.BoardVO;
 import egovframework.let.cop.bbs.service.EgovBBSManageService;
 
@@ -95,4 +97,15 @@ public class EgovMainController {
 		return "main/EgovMainView";
 	}
 
+	
+	//220629
+	@RequestMapping(value = "/index.do")
+	public String index(HttpServletRequest request, ModelMap model) throws Exception {
+	
+		LoginVO user = (LoginVO)EgovUserDetailsHelper.getAuthenticatedUser();
+		model.addAttribute("USER_INFO", user);
+		
+		return "main/Index";
+	}
+	
 }

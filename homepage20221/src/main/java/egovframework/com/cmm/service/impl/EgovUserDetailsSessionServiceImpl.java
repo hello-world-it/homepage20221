@@ -30,6 +30,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 public class EgovUserDetailsSessionServiceImpl extends EgovAbstractServiceImpl implements
 		EgovUserDetailsService {
 
+	@Override
 	public Object getAuthenticatedUser() {
 
 	
@@ -38,6 +39,7 @@ public class EgovUserDetailsSessionServiceImpl extends EgovAbstractServiceImpl i
 
 	}
 
+	@Override
 	public List<String> getAuthorities() {
 
 		// 권한 설정을 리턴한다.
@@ -46,6 +48,7 @@ public class EgovUserDetailsSessionServiceImpl extends EgovAbstractServiceImpl i
 		return listAuth;
 	}
 
+	@Override
 	public Boolean isAuthenticated() {
 		// 인증된 유저인지 확인한다.
 

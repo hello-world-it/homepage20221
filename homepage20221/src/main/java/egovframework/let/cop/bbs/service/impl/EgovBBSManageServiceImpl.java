@@ -54,7 +54,8 @@ public class EgovBBSManageServiceImpl extends EgovAbstractServiceImpl implements
      *
      * @see egovframework.let.cop.bbs.brd.service.EgovBBSManageService#deleteBoardArticle(egovframework.let.cop.bbs.TempVo.service.Board)
      */
-    public void deleteBoardArticle(Board board) throws Exception {
+    @Override
+	public void deleteBoardArticle(Board board) throws Exception {
 	FileVO fvo = new FileVO();
 
 	fvo.setAtchFileId(board.getAtchFileId());
@@ -73,7 +74,8 @@ public class EgovBBSManageServiceImpl extends EgovAbstractServiceImpl implements
      *
      * @see egovframework.let.cop.bbs.brd.service.EgovBBSManageService#insertBoardArticle(egovframework.let.cop.bbs.TempVo.service.Board)
      */
-    public void insertBoardArticle(Board board) throws Exception {
+    @Override
+	public void insertBoardArticle(Board board) throws Exception {
 	// SORT_ORDR는 부모글의 소트 오더와 같게, NTT_NO는 순서대로 부여
 
 	if ("Y".equals(board.getReplyAt())) {
@@ -100,7 +102,8 @@ public class EgovBBSManageServiceImpl extends EgovAbstractServiceImpl implements
      *
      * @see egovframework.let.cop.bbs.brd.service.EgovBBSManageService#selectBoardArticle(egovframework.let.cop.bbs.brd.service.BoardVO)
      */
-    public BoardVO selectBoardArticle(BoardVO boardVO) throws Exception {
+    @Override
+	public BoardVO selectBoardArticle(BoardVO boardVO) throws Exception {
 	if (boardVO.isPlusCount()) {
 	    int iniqireCo = bbsMngDAO.selectMaxInqireCo(boardVO);
 
@@ -116,7 +119,8 @@ public class EgovBBSManageServiceImpl extends EgovAbstractServiceImpl implements
      *
      * @see egovframework.let.cop.bbs.brd.service.EgovBBSManageService#selectBoardArticles(egovframework.let.cop.bbs.brd.service.BoardVO)
      */
-    public Map<String, Object> selectBoardArticles(BoardVO boardVO, String attrbFlag) throws Exception {
+    @Override
+	public Map<String, Object> selectBoardArticles(BoardVO boardVO, String attrbFlag) throws Exception {
 	List<BoardVO> list = bbsMngDAO.selectBoardArticleList(boardVO);
 	List<BoardVO> result = new ArrayList<BoardVO>();
 
@@ -127,7 +131,7 @@ public class EgovBBSManageServiceImpl extends EgovAbstractServiceImpl implements
 	    BoardVO vo;
 	    Iterator<BoardVO> iter = list.iterator();
 	    while (iter.hasNext()) {
-		vo = (BoardVO)iter.next();
+		vo = iter.next();
 
 		if (!"".equals(vo.getNtceBgnde()) || !"".equals(vo.getNtceEndde())) {
 		    if (EgovDateUtil.getDaysDiff(today, vo.getNtceBgnde()) > 0 || EgovDateUtil.getDaysDiff(today, vo.getNtceEndde()) < 0) {
@@ -156,7 +160,8 @@ public class EgovBBSManageServiceImpl extends EgovAbstractServiceImpl implements
      *
      * @see egovframework.let.cop.bbs.brd.service.EgovBBSManageService#updateBoardArticle(egovframework.let.cop.bbs.TempVo.service.Board)
      */
-    public void updateBoardArticle(Board board) throws Exception {
+    @Override
+	public void updateBoardArticle(Board board) throws Exception {
 	bbsMngDAO.updateBoardArticle(board);
     }
 
@@ -165,7 +170,8 @@ public class EgovBBSManageServiceImpl extends EgovAbstractServiceImpl implements
      *
      * @see egovframework.let.cop.bbs.brd.service.EgovBBSManageService#deleteGuestList(egovframework.let.cop.bbs.brd.service.BoardVO)
      */
-    public void deleteGuestList(BoardVO boardVO) throws Exception {
+    @Override
+	public void deleteGuestList(BoardVO boardVO) throws Exception {
 	bbsMngDAO.deleteGuestList(boardVO);
     }
 
@@ -174,7 +180,8 @@ public class EgovBBSManageServiceImpl extends EgovAbstractServiceImpl implements
      *
      * @see egovframework.let.cop.bbs.brd.service.EgovBBSManageService#selectGuestList(egovframework.let.cop.bbs.brd.service.BoardVO)
      */
-    public Map<String, Object> selectGuestList(BoardVO boardVO) throws Exception {
+    @Override
+	public Map<String, Object> selectGuestList(BoardVO boardVO) throws Exception {
 	List<BoardVO> result = bbsMngDAO.selectGuestList(boardVO);
 	int cnt = bbsMngDAO.selectGuestListCnt(boardVO);
 
@@ -193,7 +200,8 @@ public class EgovBBSManageServiceImpl extends EgovAbstractServiceImpl implements
      * @return
      * @throws Exception
      */
-    public String getPasswordInf(Board board) throws Exception {
+    @Override
+	public String getPasswordInf(Board board) throws Exception {
 	return bbsMngDAO.getPasswordInf(board);
     }
 }

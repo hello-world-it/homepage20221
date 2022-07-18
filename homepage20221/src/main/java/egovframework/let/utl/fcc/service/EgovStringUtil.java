@@ -479,7 +479,7 @@ public class EgovStringUtil {
 		int len = strString.length();
 
 		for (int i = 0; i < len; i++) {
-			chrBuff = (char) strString.charAt(i);
+			chrBuff = strString.charAt(i);
 
 			switch (chrBuff) {
 				case '<':
@@ -804,7 +804,7 @@ public class EgovStringUtil {
 			int len = srcString.length();
 
 			for (int i = 0; i < len; i++) {
-				chrBuff = (char) srcString.charAt(i);
+				chrBuff = srcString.charAt(i);
 
 				switch (chrBuff) {
 					case '<':

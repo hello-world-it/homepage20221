@@ -128,7 +128,8 @@ public class ComDefaultVO implements Serializable {
         this.pageSize = pageSize;
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         return ToStringBuilder.reflectionToString(this);
     }
 

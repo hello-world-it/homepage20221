@@ -43,7 +43,8 @@ public class EgovBBSUseInfoManageServiceImpl extends EgovAbstractServiceImpl imp
      * 
      * @see egovframework.let.cop.bbs.com.service.EgovBBSUseInfoManageService#deleteBBSUseInf(egovframework.let.cop.bbs.com.service.BoardUseInf)
      */
-    public void deleteBBSUseInf(BoardUseInf bdUseInf) throws Exception {
+    @Override
+	public void deleteBBSUseInf(BoardUseInf bdUseInf) throws Exception {
 	bbsUseDAO.deleteBBSUseInf(bdUseInf);
     }
 
@@ -52,7 +53,8 @@ public class EgovBBSUseInfoManageServiceImpl extends EgovAbstractServiceImpl imp
      * 
      * @see egovframework.let.cop.bbs.com.service.EgovBBSUseInfoManageService#insertBBSUseInf(egovframework.let.cop.bbs.com.service.BoardUseInf)
      */
-    public void insertBBSUseInf(BoardUseInf bdUseInf) throws Exception {
+    @Override
+	public void insertBBSUseInf(BoardUseInf bdUseInf) throws Exception {
 	bbsUseDAO.insertBBSUseInf(bdUseInf);
     }
 
@@ -61,7 +63,8 @@ public class EgovBBSUseInfoManageServiceImpl extends EgovAbstractServiceImpl imp
      * 
      * @see egovframework.let.cop.bbs.com.service.EgovBBSUseInfoManageService#selectBBSUseInfs(egovframework.let.cop.bbs.com.service.BoardUseInfVO)
      */
-    public Map<String, Object> selectBBSUseInfs(BoardUseInfVO bdUseVO) throws Exception {
+    @Override
+	public Map<String, Object> selectBBSUseInfs(BoardUseInfVO bdUseVO) throws Exception {
 
 	List<BoardUseInfVO> result = bbsUseDAO.selectBBSUseInfs(bdUseVO);
 	int cnt = bbsUseDAO.selectBBSUseInfsCnt(bdUseVO);
@@ -79,7 +82,8 @@ public class EgovBBSUseInfoManageServiceImpl extends EgovAbstractServiceImpl imp
      * 
      * @see egovframework.let.cop.bbs.com.service.EgovBBSUseInfoManageService#updateBBSUseInf(egovframework.let.cop.bbs.com.service.BoardUseInf)
      */
-    public void updateBBSUseInf(BoardUseInf bdUseInf) throws Exception {
+    @Override
+	public void updateBBSUseInf(BoardUseInf bdUseInf) throws Exception {
 	bbsUseDAO.updateBBSUseInf(bdUseInf);
     }
 
@@ -88,7 +92,8 @@ public class EgovBBSUseInfoManageServiceImpl extends EgovAbstractServiceImpl imp
      * 
      * @see egovframework.let.cop.bbs.com.service.EgovBBSUseInfoManageService#selectBBSUseInf(egovframework.let.cop.bbs.com.service.BoardUseInfVO)
      */
-    public BoardUseInfVO selectBBSUseInf(BoardUseInfVO bdUseVO) throws Exception {
+    @Override
+	public BoardUseInfVO selectBBSUseInf(BoardUseInfVO bdUseVO) throws Exception {
 	return bbsUseDAO.selectBBSUseInf(bdUseVO);
     }
 
@@ -97,13 +102,14 @@ public class EgovBBSUseInfoManageServiceImpl extends EgovAbstractServiceImpl imp
      * 
      * @see egovframework.let.cop.com.service.EgovBBSUseInfoManageService#deleteBBSUseInfByClub(egovframework.let.cop.com.service.BoardUseInf)
      */
-    public void deleteBBSUseInfByClub(BoardUseInfVO bdUseVO) throws Exception {
+    @Override
+	public void deleteBBSUseInfByClub(BoardUseInfVO bdUseVO) throws Exception {
 	List<BoardUseInf> result = bbsUseDAO.selectBBSUseInfByClub(bdUseVO);
 	
 	BoardUseInf bdUseInf = null;
 	Iterator<BoardUseInf> iter = result.iterator();
 	while (iter.hasNext()) {
-	    bdUseInf = (BoardUseInf)iter.next();
+	    bdUseInf = iter.next();
 	    
 	    bdUseInf.setLastUpdusrId(bdUseVO.getLastUpdusrId());
 	    //bdUseInf.setTrgetId(bdUseVO.getClbId());	// 사용자 ID를 넘겨야 함..
@@ -118,14 +124,15 @@ public class EgovBBSUseInfoManageServiceImpl extends EgovAbstractServiceImpl imp
      * 
      * @see egovframework.let.cop.com.service.EgovBBSUseInfoManageService#deleteBBSUseInfByCmmnty(egovframework.let.cop.com.service.BoardUseInf)
      */
-    public void deleteBBSUseInfByCmmnty(BoardUseInfVO bdUseVO) throws Exception {
+    @Override
+	public void deleteBBSUseInfByCmmnty(BoardUseInfVO bdUseVO) throws Exception {
 	List<BoardUseInf> result = bbsUseDAO.selectBBSUseInfByCmmnty(bdUseVO);
 	
 	BoardUseInf bdUseInf = null;
 	Iterator<BoardUseInf> iter = result.iterator();
 	
 	while (iter.hasNext()) {
-	    bdUseInf = (BoardUseInf)iter.next();
+	    bdUseInf = iter.next();
 	    
 	    bdUseInf.setLastUpdusrId(bdUseVO.getLastUpdusrId());
 	    //bdUseInf.setTrgetId(bdUseVO.getCmmntyId());	// 사용자 ID를 넘겨야 함..
@@ -140,7 +147,8 @@ public class EgovBBSUseInfoManageServiceImpl extends EgovAbstractServiceImpl imp
      * 
      * @see egovframework.let.cop.com.service.EgovBBSUseInfoManageService#deleteAllBBSUseInfByClub(egovframework.let.cop.com.service.BoardUseInfVO)
      */
-    public void deleteAllBBSUseInfByClub(BoardUseInfVO bdUseVO) throws Exception {
+    @Override
+	public void deleteAllBBSUseInfByClub(BoardUseInfVO bdUseVO) throws Exception {
 	bbsUseDAO.deleteAllBBSUseInfByClub(bdUseVO);
     }
 
@@ -149,7 +157,8 @@ public class EgovBBSUseInfoManageServiceImpl extends EgovAbstractServiceImpl imp
      * 
      * @see egovframework.let.cop.com.service.EgovBBSUseInfoManageService#deleteAllBBSUseInfByCmmnty(egovframework.let.cop.com.service.BoardUseInfVO)
      */
-    public void deleteAllBBSUseInfByCmmnty(BoardUseInfVO bdUseVO) throws Exception {
+    @Override
+	public void deleteAllBBSUseInfByCmmnty(BoardUseInfVO bdUseVO) throws Exception {
 	bbsUseDAO.deleteAllBBSUseInfByCmmnty(bdUseVO);
     }
 
@@ -158,7 +167,8 @@ public class EgovBBSUseInfoManageServiceImpl extends EgovAbstractServiceImpl imp
      * 
      * @see egovframework.let.cop.com.service.EgovBBSUseInfoManageService#deleteBBSUseInfByBoardId(egovframework.let.cop.com.service.BoardUseInf)
      */
-    public void deleteBBSUseInfByBoardId(BoardUseInf bdUseInf) throws Exception {
+    @Override
+	public void deleteBBSUseInfByBoardId(BoardUseInf bdUseInf) throws Exception {
 	bbsUseDAO.deleteBBSUseInfByBoardId(bdUseInf);
     }
 
@@ -167,7 +177,8 @@ public class EgovBBSUseInfoManageServiceImpl extends EgovAbstractServiceImpl imp
      * 
      * @see egovframework.let.cop.com.service.EgovBBSUseInfoManageService#selectBBSUseInfsByTrget(egovframework.let.cop.com.service.BoardUseInfVO)
      */
-    public Map<String, Object> selectBBSUseInfsByTrget(BoardUseInfVO bdUseVO) throws Exception {
+    @Override
+	public Map<String, Object> selectBBSUseInfsByTrget(BoardUseInfVO bdUseVO) throws Exception {
 	List<BoardUseInfVO> result = bbsUseDAO.selectBBSUseInfsByTrget(bdUseVO);
 	int cnt = bbsUseDAO.selectBBSUseInfsCntByTrget(bdUseVO);
 	
@@ -182,7 +193,8 @@ public class EgovBBSUseInfoManageServiceImpl extends EgovAbstractServiceImpl imp
     /**
      * 커뮤니티, 동호회에 사용되는 게시판 사용정보를 수정한다.
      */
-    public void updateBBSUseInfByTrget(BoardUseInf bdUseInf) throws Exception {
+    @Override
+	public void updateBBSUseInfByTrget(BoardUseInf bdUseInf) throws Exception {
 	bbsUseDAO.updateBBSUseInfByTrget(bdUseInf);
     }
 }

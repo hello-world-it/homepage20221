@@ -48,7 +48,8 @@ public class EgovBBSLoneMasterServiceImpl extends EgovAbstractServiceImpl implem
     /**
      * 등록된 게시판 속성정보를 삭제한다.
      */
-    public void deleteMaster(BoardMaster boardMaster) throws Exception {
+    @Override
+	public void deleteMaster(BoardMaster boardMaster) throws Exception {
 	masterDAO.deleteMaster(boardMaster);
 	
 	BoardUseInf bdUseInf = new BoardUseInf();
@@ -62,7 +63,8 @@ public class EgovBBSLoneMasterServiceImpl extends EgovAbstractServiceImpl implem
     /**
      * 신규 게시판 속성정보를 생성한다.
      */
-    public String insertMaster(BoardMaster boardMaster) throws Exception {
+    @Override
+	public String insertMaster(BoardMaster boardMaster) throws Exception {
 	String bbsId = idgenService.getNextStringId();
 	
 	boardMaster.setBbsId(bbsId);
@@ -88,14 +90,16 @@ public class EgovBBSLoneMasterServiceImpl extends EgovAbstractServiceImpl implem
     /**
      * 게시판 속성정보 한 건을 상세조회한다.
      */
-    public BoardMasterVO selectMaster(BoardMaster searchVO) throws Exception {
+    @Override
+	public BoardMasterVO selectMaster(BoardMaster searchVO) throws Exception {
 	return masterDAO.selectMaster(searchVO);
     }
 
     /**
      * 게시판 속성 정보의 목록을 조회 한다.
      */
-    public Map<String, Object> selectMasterList(BoardMasterVO searchVO) throws Exception {
+    @Override
+	public Map<String, Object> selectMasterList(BoardMasterVO searchVO) throws Exception {
 	List<BoardMasterVO> result = masterDAO.selectMasterList(searchVO);
 	int cnt = masterDAO.selectMasterListCnt(searchVO);
 	
@@ -110,7 +114,8 @@ public class EgovBBSLoneMasterServiceImpl extends EgovAbstractServiceImpl implem
     /**
      * 게시판 속성정보를 수정한다.
      */
-    public void updateMaster(BoardMaster boardMaster) throws Exception {
+    @Override
+	public void updateMaster(BoardMaster boardMaster) throws Exception {
 	masterDAO.updateMaster(boardMaster);
     }
 }

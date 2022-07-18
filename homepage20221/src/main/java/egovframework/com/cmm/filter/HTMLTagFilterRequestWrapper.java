@@ -24,6 +24,7 @@ public class HTMLTagFilterRequestWrapper extends HttpServletRequestWrapper {
 		super(request);
 	}
 
+	@Override
 	public String[] getParameterValues(String parameter) {
 
 		String[] values = super.getParameterValues(parameter);
@@ -67,6 +68,7 @@ public class HTMLTagFilterRequestWrapper extends HttpServletRequestWrapper {
 		return values;
 	}
 
+	@Override
 	public String getParameter(String parameter) {
 		
 		String value = super.getParameter(parameter);

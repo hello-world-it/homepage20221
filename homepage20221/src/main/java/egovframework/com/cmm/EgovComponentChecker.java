@@ -37,7 +37,7 @@ public class EgovComponentChecker extends EgovAbstractServiceImpl implements App
 	public void setApplicationContext(ApplicationContext context)
 		throws BeansException {
 
-		this.context = context;
+		EgovComponentChecker.context = context;
 	}
 
 	/**

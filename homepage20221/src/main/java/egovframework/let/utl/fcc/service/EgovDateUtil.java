@@ -549,10 +549,10 @@ public class EgovDateUtil {
 
 		lcal.setTimeInMillis(cal.getTimeInMillis());
 
-		String year = String.valueOf(lcal.get(ChineseCalendar.EXTENDED_YEAR) - 2637);
-		String month = String.valueOf(lcal.get(ChineseCalendar.MONTH) + 1);
-		String day = String.valueOf(lcal.get(ChineseCalendar.DAY_OF_MONTH));
-		String leap = String.valueOf(lcal.get(ChineseCalendar.IS_LEAP_MONTH));
+		String year = String.valueOf(lcal.get(com.ibm.icu.util.Calendar.EXTENDED_YEAR) - 2637);
+		String month = String.valueOf(lcal.get(com.ibm.icu.util.Calendar.MONTH) + 1);
+		String day = String.valueOf(lcal.get(com.ibm.icu.util.Calendar.DAY_OF_MONTH));
+		String leap = String.valueOf(lcal.get(com.ibm.icu.util.Calendar.IS_LEAP_MONTH));
 
 		String pad4Str = "0000";
 		String pad2Str = "00";
@@ -584,10 +584,10 @@ public class EgovDateUtil {
 		cal = Calendar.getInstance();
 		lcal = new ChineseCalendar();
 
-		lcal.set(ChineseCalendar.EXTENDED_YEAR, Integer.parseInt(dateStr.substring(0, 4)) + 2637);
-		lcal.set(ChineseCalendar.MONTH, Integer.parseInt(dateStr.substring(4, 6)) - 1);
-		lcal.set(ChineseCalendar.DAY_OF_MONTH, Integer.parseInt(dateStr.substring(6, 8)));
-		lcal.set(ChineseCalendar.IS_LEAP_MONTH, iLeapMonth);
+		lcal.set(com.ibm.icu.util.Calendar.EXTENDED_YEAR, Integer.parseInt(dateStr.substring(0, 4)) + 2637);
+		lcal.set(com.ibm.icu.util.Calendar.MONTH, Integer.parseInt(dateStr.substring(4, 6)) - 1);
+		lcal.set(com.ibm.icu.util.Calendar.DAY_OF_MONTH, Integer.parseInt(dateStr.substring(6, 8)));
+		lcal.set(com.ibm.icu.util.Calendar.IS_LEAP_MONTH, iLeapMonth);
 
 		cal.setTimeInMillis(lcal.getTimeInMillis());
 

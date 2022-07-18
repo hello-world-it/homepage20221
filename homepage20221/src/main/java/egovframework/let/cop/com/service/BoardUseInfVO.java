@@ -557,7 +557,8 @@ public class BoardUseInfVO extends BoardUseInf implements Serializable {
     /**
      * toString 메소드를 대치한다.
      */
-    public String toString() {
+    @Override
+	public String toString() {
 	return ToStringBuilder.reflectionToString(this);
     }
 }

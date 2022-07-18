@@ -2,8 +2,6 @@ package egovframework.let.temp.service;
 
 import java.io.Serializable;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
 import egovframework.com.cmm.ComDefaultVO;
 
 public class TempVO extends ComDefaultVO implements Serializable {

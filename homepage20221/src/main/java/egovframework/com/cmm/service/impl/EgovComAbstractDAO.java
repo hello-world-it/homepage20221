@@ -25,6 +25,7 @@ import com.ibatis.sqlmap.client.SqlMapClient;
 public abstract class EgovComAbstractDAO extends EgovAbstractDAO{
 	
 	
+	@Override
 	@Resource(name="egov.sqlMapClient")
 	public void setSuperSqlMapClient(SqlMapClient sqlMapClient) {
         super.setSuperSqlMapClient(sqlMapClient);

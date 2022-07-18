@@ -166,7 +166,7 @@ public class BBSManageDAO extends EgovAbstractDAO {
 	BoardVO vo;
 	Iterator<BoardVO> iter = sortList.iterator();
 	while (iter.hasNext()) {
-	    vo = (BoardVO)iter.next();
+	    vo = iter.next();
 	    update("BBSManageDAO.updateSortOrder", vo);
 	}
     }

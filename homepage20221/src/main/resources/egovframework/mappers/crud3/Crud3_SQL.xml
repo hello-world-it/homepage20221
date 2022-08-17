@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.let.crud3.service.impl.Crud3Mapper">
+<!--  namespace(mapper와 연결) / 패키지명.매퍼명으로 복붙헤서 가져오면 오타를 줄일 수 있다! / Ctrl 클릭시  namespace의 위치로 이동 -->
+
+	<resultMap id="crud3" type="egovframework.let.crud3.service.Crud3VO"> <!-- 변수를 받아오는 resultMap / 쿼리에 대한 라인 수와 속도를 줄여주기 위해 사용  -->
+		<result property="crudId" column="CRUD_ID" /> <!-- 변수명은 컬럼명(객체명)과 맞춰준다. 변수명만 확인해서 뭔지 알 수 있게 -->
+		<result property="crudSj" column="CRUD_SJ" />
+		<result property="crudCn" column="CRUD_CN" />
+		<result property="userNm" column="USER_NM" /> 
+		<result property="frstRegistPnttm" column="FRST_REGIST_PNTTM" />
+	</resultMap> 
+	
+	<!-- list / limit #{recordCountPerPage} offset #{firstIndex}를 추가하여 한 화면에 10개씩 보여주기
+	 #{recordCountPerPage} : class ComDefaultVO에 pageUnit 10개 지정되어 있다  -->
+	<!-- sql함수 중 date_format을 사용하여 날짜형태로 출력(datetime) -->
+	<select id="selectCrudList" resultType="egovMap"> <!-- sql-mapper-config - egovMap (변수명을 규칙에 맞게 변환) -->
+		select CRUD_ID, CRUD_SJ, USER_NM, DATE_FORMAT(FRST_REGIST_PNTTM, '%Y-%m-%d') as FRST_REGIST_PNTTM from LETCRUD3 order by CRUD_ID desc limit #{recordCountPerPage} offset #{firstIndex}
+	</select>
+	
+	<!-- 게시글에 대한 총 카운트 수 / rownum(오라클)과 limit(마리아db) 선언 -->
+	<select id="selectCrudListCnt" resultType="java.lang.Integer"> <!-- Type은 객체 -->
+		select count(*) cnt from LETCRUD3
+	</select>
+	
+	<!-- config - sql-mapper-config엔 VO가 연결되어 있어. 어느 VO에 담겨야 하는지 알려주기 위해 CrudVO에 연결 ↓ -->
+	<!--select CRUD_ID as crudId, CRUD_SJ as crudSj, CRUD_CN as crudCn, USER_NM as userNm, FRST_REGIST_PNTTM as frstRegistPnttm from LETCRUD3 where CRUD_ID = #{crudId} -->
+	
+	<select id="selectCrud" resultMap="crud3">  <!-- 위의 resultMap과 연결: 속도 -->	
+		select CRUD_ID, CRUD_SJ, CRUD_CN, USER_NM, FRST_REGIST_PNTTM from LETCRUD3 where CRUD_ID = #{crudId}
+	</select>
+	
+	<!-- insert문 작성 -->
+	<insert id="insertCrud" parameterType="crud3VO"> <!-- sql_mapper_config.xml에 arias 명칭을 정해놔서 parameterType="crud3VO"으로 선언 -->
+		insert into LETCRUD3 (CRUD_ID, CRUD_SJ, CRUD_CN, USER_NM, FRST_REGIST_PNTTM) values ( #{crudId}, #{crudSj}, #{crudCn}, #{userNm}, now() )
+	</insert> <!-- id값을 받아 넣기 위해 쿼리문에 CRUD_ID 추가 -->
+	
+	<!-- update문 작성 -->
+	<update id="updateCrud" parameterType="egovframework.let.crud3.service.Crud3VO">
+		update LETCRUD3 set CRUD_SJ = #{crudSj}, CRUD_CN = #{crudCn}, USER_NM = #{userNm} where CRUD_ID = #{crudId}
+	</update>
+	
+	<!-- delete문 작성 -->
+	<delete id="deleteCrud" parameterType="egovframework.let.crud3.service.Crud3VO">
+		delete from LETCRUD3 where CRUD_ID = #{crudId}
+	</delete>
+
+</mapper>

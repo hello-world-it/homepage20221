@@ -188,6 +188,14 @@
 			<artifactId>thumbnailator</artifactId>
 			<version>0.4.2</version>
 		</dependency>
+		
+		<!-- 220817 JSON 라이브러리 추가 / 모든 라이브러리는 pom.xml에서 관리 -->
+		<dependency>
+			<groupId>net.sf.json-lib</groupId>
+			<artifactId>json-lib</artifactId>
+			<version>2.4</version>
+			<classifier>jdk15</classifier>
+		</dependency>
 	
 	</dependencies>
 

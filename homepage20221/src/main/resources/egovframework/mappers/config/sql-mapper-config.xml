@@ -7,5 +7,6 @@
 		<typeAlias alias="tempVO" type="egovframework.let.temp.service.TempVO"/>
 		<typeAlias alias="crudVO" type="egovframework.let.crud.service.CrudVO"/> 
 		<!-- ex) Crud_SQL에서 resultType=crudVO처럼 alias만 쓰기 위해 사용  -->
+		<typeAlias alias="crud3VO" type="egovframework.let.crud3.service.Crud3VO"/> 
 	</typeAliases>
 </configuration>

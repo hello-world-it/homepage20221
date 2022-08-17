@@ -258,7 +258,7 @@ public class EgovFileScrty {
 	
 		byte[] hashValue = null; // 해쉬값
 	
-		MessageDigest md = MessageDigest.getInstance("SHA-256");
+		MessageDigest md = MessageDigest.getInstance("SHA-256"); //단방향암호 (복호화X, 사용자정보를 암호화 시 사용) / API 교환 시 양방향
 		
 		md.reset();
 		md.update(id.getBytes());

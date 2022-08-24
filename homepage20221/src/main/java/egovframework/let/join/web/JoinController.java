@@ -45,16 +45,17 @@ public class JoinController {
 	private String insertMember(@ModelAttribute("searchVO") JoinVO vo, HttpServletRequest request, ModelMap model) throws Exception {
 
 		if(!EgovStringUtil.isEmpty(vo.getLoginType())) {
-			//일반가입을 제외하고는 ID값은 SNS명 + ID값 (SNS 사용 시 -> ex. KAKAO-123456 )
+			//ID규칙☆ 일반가입을 제외하고는 ID값은 SNS명 + ID값 (SNS 사용 시 -> ex. KAKAO-123456, NAVER-123456 / SNS별 ID값 중복 방지를 위해 SNS명을 붙여준다 )
 			if(!("normal").equals(vo.getLoginType())) {
 				vo.setEmplyrId(vo.getLoginType() + "-" + vo.getEmplyrId());
-				vo.setPassword(""); //SNS가입자는 비번이 필요 없어. SNS로 로그인 하니깐. not null이라 넣어줌
+				vo.setPassword(""); //SNS가입자는 비번이 필요 없어. SNS로 로그인 하니깐. not null이라 빈공간을 넣어줌
 				vo.setPasswordHint("SNS가입자"); //SNS가입자는 비번을 찾을 일이 없어
 				vo.setPasswordCnsr("SNS가입자");
 			}
 		}
 		
-		if(joinService.duplicateCheck(vo) > 0) { //일반회원가입
+		//일반회원가입
+		if(joinService.duplicateCheck(vo) > 0) { //중복가입방지(동시 접속 해서 동시에 동일한 아이디로의 가입을 방지하기 위해)
 			model.addAttribute("message", egovMessageSource.getMessage("fail.duplicate.member")); //이미 사용중인 ID입니다.
 			return "forward:/join/memberType.do";
 		}else {
@@ -73,10 +74,10 @@ public class JoinController {
 		String successYn = "Y";
 		String message = "성공";
 		
-		JSONObject jo = new JSONObject();
-		response.setContentType("application/json; charset=utf-8");
+		JSONObject jo = new JSONObject(); //JSONObject는  Map 처럼 사용 (현재 우리 라이브러리 기준으로 사용)
+		response.setContentType("application/json; charset=utf-8"); //보안을 위해 정확히 어떤 데이터인지 알려주려 사용 (기본은 text)
 		
-		int duplicateCnt = joinService.duplicateCheck(vo); 
+		int duplicateCnt = joinService.duplicateCheck(vo); //중복체크
 		if(duplicateCnt > 0) { //중복일 경우 1 (이미 가입한 아이디가 하나 있음) / 마일리지 관리(날짜를 체크해서), 적립금 관리(당일 쿠폰 사용 시) 시 응용해서 사용 
 			successYn = "N";
 			message = egovMessageSource.getMessage("fail.duplicate.member"); //이미 사용중인 ID입니다.
@@ -85,8 +86,8 @@ public class JoinController {
 		jo.put("successYn", successYn);
 		jo.put("message", message);
 		
-		PrintWriter printwriter = response.getWriter();
-		printwriter.println(jo.toString());
+		PrintWriter printwriter = response.getWriter(); 
+		printwriter.println(jo.toString()); //JSON으로 담은걸 우리가 보는 페이지에 뿌려줌
 		printwriter.flush();
 		printwriter.close();
 	}

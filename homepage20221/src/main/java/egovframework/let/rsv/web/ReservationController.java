@@ -51,7 +51,20 @@ public class ReservationController { //파일명은 프로젝트에서 하나만
 		return "rsv/RsvSelectList";
 	}
 	
+	//220928 예약정보 상세(사용자)
+	@RequestMapping(value = "/rsv/rsvSelect.do")
+	public String select(@ModelAttribute("searchVO") ReservationVO searchVO, HttpServletRequest request, ModelMap model) throws Exception {
+		
+		request.getSession().removeAttribute("sessionReservationApply");
+		
+		LoginVO user = (LoginVO)EgovUserDetailsHelper.getAuthenticatedUser();
+		model.addAttribute("USER_INFO", user);
+		
+		ReservationVO result = reservationService.selectReservation(searchVO);
+		
+		model.addAttribute("result", result);
+		return "rsv/RsvSelect";
+	}
 	
 }
-
 

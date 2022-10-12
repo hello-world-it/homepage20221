@@ -12,7 +12,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
 
-<title>예약자정보 목록 가져오기</title> 
+<title>예약자정보목록</title> 
 
 <!-- BBS Style -->
 <link href="/asset/BBSTMP_0000000000001/style.css" rel="stylesheet" />
@@ -47,11 +47,9 @@
 					<thead>
 						<tr>
 							<th class="num" scople="col">번호</th>
-							<th scople="col">프로그램명</th>
 							<th scope="col">신청자명</th>
 							<th scope="col">신청일</th>
 							<th scope="col">신청상태</th>
-							<th scople="col">승인&반려일</th>
 							<th scope="col">관리</th>
 						</tr>
 					</thead>
@@ -60,24 +58,17 @@
 							<tr>
 								<td class="num"><c:out value="${fn:length(resultList) - (status.index)}"/></td>
 								<td>
-									<c:url var="rsvViewUrl" value="/rsv/rsvSelect.do${_BASE_PARAM}">
-										<c:param name="resveId" value="${result.resveId}"/>
-									</c:url>
-									<a href="${rsvViewUrl}" target="_blank">
-										<c:out value="${result.resveSj}"/>
-									</a>
-								</td>
-								<td>
-									<c:url var="viewUrl" value="/rsv/rsvApplySelect.do${_BASE_PARAM}">
+									<c:url var="viewUrl" value="/admin/rsv/rsvApplySelect.do${_BASE_PARAM}">
 										<c:param name="resveId" value="${result.resveId}"/>
 										<c:param name="reqstId" value="${result.reqstId}"/>
+										<c:param name="pageIndex" value="${searchVO.pageIndex}"/>
 									</c:url>
 									<a href="${viewUrl}">
 										<c:out value="${result.chargerNm}"/>
 										(<c:out value="${result.frstRegisterId}"/>)
 									</a>
 								</td>
-								<td><fmt:formatDate value="${result.frstRegistPnttm}" pattern="yyyy-MM-dd"/></td>
+								<td><fmt:formatDate value="${result.frstRegistPnttm}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
 								<td>
 									<c:choose>
 										<c:when test="${result.confmSeCode eq 'R'}">신청 접수 중</c:when>
@@ -86,19 +77,12 @@
 									</c:choose>
 								</td>
 								<td>
-									<c:choose>
-										<c:when test="${result.confmSeCode ne 'R'}">
-											<fmt:formatDate value="${result.confmPnttm}" pattern="yyyy-MM-dd"/>
-										</c:when>
-										<c:otherwise>-</c:otherwise>
-									</c:choose>
-								</td>
-								<td>
-									<c:url var="deleteUrl" value="/rsv/rsvApplyDelete.do${_BASE_PARAM}">
+									<c:url var="deleteUrl" value="/admin/rsv/rsvApplyDelete.do${_BASE_PARAM}">
 										<c:param name="resveId" value="${result.resveId}"/>
 										<c:param name="reqstId" value="${result.reqstId}"/>
+										<c:param name="pageIndex" value="${searchVO.pageIndex}"/>
 									</c:url>
-									<a href="${deleteUrl}" class="btn spot btn-del" data-status="${result.confmSeCode}">삭제</a>
+									<a href="${deleteUrl}" class="btn spot btn-del">삭제</a>
 								</td>
 							</tr>
 						</c:forEach>
@@ -106,7 +90,7 @@
 						<%-- 글이 없을 경우 --%>
 						<c:if test="${fn:length(resultList) == 0}">
 							<tr class="empty">
-								<td colspan="7">신청자가 없습니다.</td>
+								<td colspan="5">신청자가 없습니다.</td>
 							</tr>
 						</c:if>
 					
@@ -115,7 +99,7 @@
 			</div>
 			
 			<div class="btn-cont ar">
-				<c:url var="listUrl" value="/rsv/selectList.do${_BASE_PARAM}"/>
+				<c:url var="listUrl" value="/admin/rsv/rsvSelectList.do${_BASE_PARAM}"/>
 				<a href="${listUrl}" class="btn">목록</a>
 			</div> 
 			
@@ -131,17 +115,11 @@
 	alert("${message}");
 </c:if>
 
-$(document).ready(function(){
-	$(".btn-del").click(function(){ //예약 신청 시 list에서 del 버튼이 늘어나기 때문에 class로 btn-del 셋팅 (class -> 하나 이상 존재) 
-		var status = $(this).data("status");
-		if(status == "O") {
-			alert("신청 승인 상태에서는 반려하실 수 없습니다.");
-			return false;
-		}else if(status == "X") {
-			alert("신청 반려 상태에서는 반려하실 수 없습니다.");
-			return false;
-		}
-	});
+//예약 글 삭제
+$(".btn-del").click(function(){
+	if(!confirm("삭제하시겠습니까?")){
+		return false;
+	}
 });
 </script>
 		

@@ -132,6 +132,12 @@
 					<c:set var="pagingParam"><c:out value="${pageUrl}" /></c:set>
 					<ui:pagination paginationInfo="${paginationInfo}" type="image" jsFunction="${pagingParam}" />
 				</div>
+				
+				<c:if test="${not empty USER_INFO.id }">
+					<div class="btn-cont ar">
+						<a href="/rsv/selectApplyList.do" class="btn spoy">신청내역 확인</a>
+					</div>
+				</c:if>
 						
 			</div>	
 		</div>

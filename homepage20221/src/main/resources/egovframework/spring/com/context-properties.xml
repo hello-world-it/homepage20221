@@ -13,12 +13,15 @@
 	        	<entry key="Globals.addedOptions" value="false"/>
 	        	
 	        	<!-- 220615 -->
-	        	<entry key="board.fileStorePath" value="${Globals.File}/upload/board/" /> 
+	        	<entry key="board.fileStorePath" value="${Globals.File}/upload/board/"/> 
 	        	<!-- 			저장할 경로  			globals에서 가져온 변수 ${Globals.File} - 파일저장위치 -->
 	        	
-	        	<entry key="photoThumbWidth" value="200" />
-		        <entry key="photoThumbHeight" value="140" />
+	        	<entry key="photoThumbWidth" value="200"/>
+		        <entry key="photoThumbHeight" value="140"/>
 		        <!-- 썸네일의 기본 크기 -->
+		        
+		        <!-- 221017 예약자 업로드 물리경로 -->
+		        <entry key="rsvFileStorePath" value="${Globals.File}/upload/rsv"/>
 	        </map>
 		</property>
 	</bean>

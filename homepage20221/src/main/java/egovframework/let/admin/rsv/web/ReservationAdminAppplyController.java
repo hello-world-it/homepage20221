@@ -1,21 +1,34 @@
 package egovframework.let.admin.rsv.web;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.servlet.ModelAndView;
 
 import egovframework.com.cmm.LoginVO;
 import egovframework.com.cmm.service.EgovFileMngUtil;
+import egovframework.com.cmm.service.FileVO;
+import egovframework.com.cmm.service.JsonResponse;
 import egovframework.com.cmm.util.EgovUserDetailsHelper;
 import egovframework.let.rsv.service.ReservationApplyService;
 import egovframework.let.rsv.service.ReservationApplyVO;
 import egovframework.let.rsv.service.ReservationService;
+import egovframework.let.utl.fcc.service.EgovStringUtil;
 import egovframework.rte.psl.dataaccess.util.EgovMap;
 
 @Controller
@@ -44,6 +57,11 @@ public class ReservationAdminAppplyController {
 		
 		List<EgovMap> resultList = reservationApplyService.selectReservationApplyList(searchVO);
 		model.addAttribute("resultList", resultList);
+		
+		// 221017 엑셀 다운로드
+		if("Y".equals(searchVO.getExcelAt())) {
+			return "admin/rsv/RsvApplySelectListExcel";
+		}
 		
 		return "admin/rsv/RsvApplySelectList";
 	}
@@ -109,5 +127,90 @@ public class ReservationAdminAppplyController {
 		
 		return "forward:/admin/rsv/selectApplyList.do";
 	}
+	
+	
+	//예약자정보 엑셀 다운로드 (221017)
+	@RequestMapping(value= "/admin/rsv/excel.do")
+	public ModelAndView excel(@ModelAttribute("searchVO") ReservationApplyVO searchVO, HttpServletRequest request, HttpServletResponse response, ModelMap model) throws Exception {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<String> columMap = new ArrayList<String>();
+		List<Object> valueMap = new ArrayList<Object>();
+		String fileName = "";
+		
+		columMap.add("번호");
+		columMap.add("신청자명");
+		columMap.add("연락처");
+		columMap.add("이메일");
+		columMap.add("신청일");
+		
+		map.put("title", "예약신청현황");
+		fileName = EgovStringUtil.getConvertFileName(request, "예약신청현황");
+				
+		//관리자
+		searchVO.setMngAt("Y");
+		//목록
+		List<EgovMap> resultList = reservationApplyService.selectReservationApplyList(searchVO);
+		
+		if(resultList != null) {
+			EgovMap tmpVO = null;
+			Map<String, Object> tmpMap = null;
+			for(int i=0; i<resultList.size(); i++) {
+				tmpVO = resultList.get(i);
+				
+				tmpMap = new HashMap<String, Object>();
+				tmpMap.put("번호", i+1); //위의 columMap(컬럼명)과 순서 동일
+				tmpMap.put("신청자명", tmpVO.get("chargerNm").toString() + "(" + tmpVO.get("frstRegisterId").toString() + ")");
+				tmpMap.put("연락처", tmpVO.get("telno").toString());
+				tmpMap.put("이메일", tmpVO.get("email").toString());
+				tmpMap.put("신청일", tmpVO.get("frstRegistPnttmYmd").toString());
+				
+				valueMap.add(tmpMap); //map을 리스트화 해서 valueMap에 저장
+			}
+		}
+		
+		map.put("columMap", columMap);
+		map.put("valueMap", valueMap);
+		
+		//파일 다운로드 임을 알려줌 (jsp가 아님)
+		response.setHeader("Content-Disposition", "attachment; filename=" + fileName + ".xls");
+		return new ModelAndView("excelDownloadView", "dataMap", map);
+	}
+	
+	//엑셀업로드
+	@RequestMapping(value = "/admin/rsv/excelUpload.json", method=RequestMethod.POST)
+	public @ResponseBody JsonResponse excelUpload(@ModelAttribute ReservationApplyVO searchVO, 
+			ModelMap model, MultipartHttpServletRequest multiRequest,
+			HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		JsonResponse res = new JsonResponse();
+		res.setSuccess(true);
+		
+		try {
+			List<FileVO> result = null;
+			final Map<String, MultipartFile> files = multiRequest.getFileMap();
+			if(!files.isEmpty()) {
+				result = fileUtil.parseFileInf(files, "TEMP_", 0, null, "rsvFileStorePath");
+				Map<String, Object> resultMap = new HashMap<>();
+				
+				for(FileVO file : result) {
+					if("xls".equals(file.getFileExtsn()) || "xlsx".equals(file.getFileExtsn())) {
+						searchVO.setCreatIp(request.getRemoteAddr());
+						resultMap = reservationApplyService.excelUpload(file, searchVO);
+						if(!(Boolean)resultMap.get("success")) {
+							res.setMessage(String.valueOf(resultMap.get("msg")));
+							ArrayList resultList = (ArrayList) resultMap.get("resultList");
+							res.setData(resultList);
+							res.setSuccess(false);
+						}
+					}
+				}
+			}
+		} catch (DataAccessException e) {
+			res.setMessage(e.getLocalizedMessage());
+		}
+		return res;
+	}
+	
 }
 

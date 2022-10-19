@@ -178,9 +178,9 @@ public class ReservationAdminAppplyController {
 	}
 	
 	//엑셀업로드
-	@RequestMapping(value = "/admin/rsv/excelUpload.json", method=RequestMethod.POST)
-	public @ResponseBody JsonResponse excelUpload(@ModelAttribute ReservationApplyVO searchVO, 
-			ModelMap model, MultipartHttpServletRequest multiRequest,
+	@RequestMapping(value = "/admin/rsv/excelUpload.json", method=RequestMethod.POST) //첨부파일은 무조건 post로 보냄 (통신규칙)
+	public @ResponseBody JsonResponse excelUpload(@ModelAttribute ReservationApplyVO searchVO, //@ResponseBody : json으로 보냄  자바v1.8이상 
+			ModelMap model, MultipartHttpServletRequest multiRequest, //MultipartHttpServletRequest : 첨부파일 받기
 			HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
 		JsonResponse res = new JsonResponse();
@@ -190,13 +190,13 @@ public class ReservationAdminAppplyController {
 			List<FileVO> result = null;
 			final Map<String, MultipartFile> files = multiRequest.getFileMap();
 			if(!files.isEmpty()) {
-				result = fileUtil.parseFileInf(files, "TEMP_", 0, null, "rsvFileStorePath");
-				Map<String, Object> resultMap = new HashMap<>();
+				result = fileUtil.parseFileInf(files, "TEMP_", 0, null, "rsvFileStorePath"); //엑셀파일 저장 방식 / "rsvFileStorePath" propertier에 설정해놓은 물리경로
+				Map<String, Object> resultMap = new HashMap<>(); //json 형식으로 사용하기 위해 map 선언
 				
-				for(FileVO file : result) {
-					if("xls".equals(file.getFileExtsn()) || "xlsx".equals(file.getFileExtsn())) {
-						searchVO.setCreatIp(request.getRemoteAddr());
-						resultMap = reservationApplyService.excelUpload(file, searchVO);
+				for(FileVO file : result) { //배열의 크기를 모를 떄, 배열의 크기만큼 for문 사용 시 자주 사용
+					if("xls".equals(file.getFileExtsn()) || "xlsx".equals(file.getFileExtsn())) { //xlsx 리눅스(서버)에서 읽을 수 X //업로드 시 파일 확장자 변경X
+						searchVO.setCreatIp(request.getRemoteAddr()); 
+						resultMap = reservationApplyService.excelUpload(file, searchVO); //ReservationApplyServiceImpl 의  excelUpload 실행하여 resultMap에 넣음 (임플에 정의: 트랜잭션 처리 에러 시 전체rollback을 위해)
 						if(!(Boolean)resultMap.get("success")) {
 							res.setMessage(String.valueOf(resultMap.get("msg")));
 							ArrayList resultList = (ArrayList) resultMap.get("resultList");

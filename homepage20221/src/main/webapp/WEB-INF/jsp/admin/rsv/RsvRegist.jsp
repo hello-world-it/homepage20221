@@ -160,7 +160,8 @@ $(document).ready(function(){
 		dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
 		dayNamesMin: ['일', '월', '화', '수', '목', '금', '토'], //현재 나오는 요일 명칭 (디폴트). 위 둘 중 수정할 수 있음
 		showMonthAfterYear: true, //22년9월 -> 순서 셋팅 
-		yearSuffix: '년'
+		yearSuffix: '년',
+		minDate: 0
 	});
 	
 	$(".timepicker").timepicker({ //시간 규칙이 있을 때 사용 (분단위 초단위X)

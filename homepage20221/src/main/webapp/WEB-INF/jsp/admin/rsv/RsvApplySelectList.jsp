@@ -117,9 +117,9 @@
 				<a href="${listUrl}" class="btn">목록</a>
 			</div> 
 			
-			<div class="excelUploadBox">
+			<div class="excelUploadBox"> <!-- enctype="multipart/form-data" method="post" : 첨부파일 올릴 때필수. POST -->
 				<form id="excelForm" name="excelForm" action="/admin/rsv/excelUpload.json" enctype="multipart/form-data" method="post">
-					<input type="hidden" name="resveId" id="resveId" value="${param.resveId}"/>
+					<input type="hidden" name="resveId" id="resveId" value="${param.resveId}"/> <!-- name값을 찾아서 vo에 매칭 -->
 					<input type="hidden" name="resveDe" value="TYPE01"/>
 					
 					<a href="/excel/rqtExcel_sample.xls" class="btn" dowload>엑셀 업로드 샘플 다운로드</a>
@@ -172,11 +172,11 @@ $(document).on('click', '#excelReg', function(e){
 			
 			if(result.success) {
 				$("#excel").hide();
-				window.location.reload();
-			}else {
+				window.location.reload(); //페이지를 다시 로드하는 순수 javascript
+			}else { //데이터가 잘 못 들어갔을 때
 				//alert(result.message);
 				for(i=0; i<result.data.length; i++) {
-					if(i != 0) {
+					if(i != 0) { 
 						message += "\n";
 					}
 					message += result.data[i].userId + " : " + result.data[i].message;

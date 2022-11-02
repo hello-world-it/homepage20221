@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.let.popup.service.impl.PopupMapper">
+
+	<select id="selectPopupList" resultType="egovMap">
+		SELECT
+			POPUP_ID
+			, SYS_TY_CODE
+			, POPUP_TITLE_NM
+			, POPUP_HLC
+			, POPUP_WLC
+			, POPUP_HSIZE
+			, POPUP_WSIZE
+			, POPUP_CN
+			, NTCE_BGNDE
+			, NTCE_ENDDE
+			, FRST_REGIST_PNTTM
+			, FRST_REGISTER_ID
+			, LAST_UPDT_PNTTM
+			, LAST_UPDUSR_ID
+		FROM popup
+		<include refid="selectPopupListWhere"></include>
+		ORDER BY FRST_REGIST_PNTTM DESC
+		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+	</select>
+	
+	<select id="selectPopupListCnt" resultType="java.lang.Integer">
+		SELECT
+			COUNT(*) CNT
+		FROM popup
+		<include refid="selectPopupListWhere"></include>
+	</select>
+
+	<sql id="selectPopupListWhere">
+		<where>
+			USE_AT = 'Y'
+			<if test='searchCondition != null and searchCondition != ""'>
+				<choose>
+					<when test='searchCondition == "0"'>
+						AND POPUP_TITLE_NM LIKE CONCAT('%', #{searchKeyword}, '%')
+					</when>
+					<when test='searchCondition == "1"'>
+						AND POPUP_CN LIKE CONCAT('%', #{searchKeyword}, '%')
+					</when>
+				</choose>
+			</if>
+		</where>
+	</sql>
+
+	<insert id="insertPopup" parameterType="egovframework.let.popup.service.PopupVO">
+		INSERT INTO popup (
+			POPUP_ID
+			, SYS_TY_CODE
+			, POPUP_TITLE_NM
+			, POPUP_HLC
+			, POPUP_WLC
+			, POPUP_HSIZE
+			, POPUP_WSIZE
+			, POPUP_CN
+			, NTCE_BGNDE
+			, NTCE_ENDDE
+			, USE_AT
+			, FRST_REGIST_PNTTM
+			, FRST_REGISTER_ID
+			, LAST_UPDT_PNTTM
+			, LAST_UPDUSR_ID
+		)VALUES(
+			#{popupId}
+			, #{sysTyCode}
+			, #{popupTitleNm}
+			, #{popupHlc}
+			, #{popupWlc}
+			, #{popupHsize}
+			, #{popupWsize}
+			, #{popupCn}
+			, #{ntceBgnde}
+			, #{ntceEndde}
+			, 'Y'
+			, NOW()
+			, #{userId}
+			, NOW()
+			, #{userId}
+		)
+	</insert>
+	
+	<select id="selectPopup" resultType="egovMap">
+		SELECT
+			POPUP_ID
+			, SYS_TY_CODE
+			, POPUP_TITLE_NM
+			, POPUP_HLC
+			, POPUP_WLC
+			, POPUP_HSIZE
+			, POPUP_WSIZE
+			, POPUP_CN
+			, NTCE_BGNDE
+			, NTCE_ENDDE
+			, FRST_REGIST_PNTTM
+			, FRST_REGISTER_ID
+			, LAST_UPDT_PNTTM
+			, LAST_UPDUSR_ID
+		FROM popup
+		WHERE POPUP_ID = #{popupId}
+	</select>
+	
+	<update id="updatePopup" parameterType="egovframework.let.popup.service.PopupVO">
+		UPDATE popup SET
+			SYS_TY_CODE = #{sysTyCode}
+			, POPUP_TITLE_NM = #{popupTitleNm}
+			, POPUP_HLC = #{popupHlc}
+			, POPUP_WLC = #{popupWlc}
+			, POPUP_HSIZE = #{popupHsize}
+			, POPUP_WSIZE = #{popupWsize}
+			, POPUP_CN = #{popupCn}
+			, NTCE_BGNDE = #{ntceBgnde}
+			, NTCE_ENDDE = #{ntceEndde}
+			, LAST_UPDT_PNTTM = NOW()
+			, LAST_UPDUSR_ID = #{userId}
+		WHERE POPUP_ID = #{popupId}
+	</update>
+	
+	<delete id="deletePopup" parameterType="egovframework.let.popup.service.PopupVO">
+		UPDATE popup SET
+			USE_AT = 'N'
+			, LAST_UPDT_PNTTM = NOW()
+			, LAST_UPDUSR_ID = #{userId}
+		WHERE POPUP_ID = #{popupId}
+	</delete>
+</mapper>

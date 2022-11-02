@@ -107,7 +107,7 @@ kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
 
 
 
-<div id="map" style="width:80%;height:350px;"></div>
+<!-- <div id="map" style="width:80%;height:350px;"></div>
 
 <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=75cde9668660e33fb696495c08293a73"></script>
 <script>
@@ -163,7 +163,7 @@ function displayMarker(place) {
         infowindow.open(map, marker);
     });
 }
-</script>
+</script> -->
 
 
 
@@ -200,6 +200,9 @@ function vali() {
 	alert("${loginMessage}");
 </c:if>
 </script>
+
+<%-- 221102 팝업 띄우기 위해 main에 import --%>
+<c:import url="/popup/popupService.do" charEncoding="utf-8"/>
 
 </body>
 </html>
